@@ -1,16 +1,20 @@
 from gpiozero import Servo
+from gpiozero.pins.pigpio import PiGPIOFactory  # Import PiGPIOFactory
 import time
 import os
 
-# Initialize servo on GPIO pin 17
-servo = Servo(17)
+# Initialize PiGPIOFactory
+factory = PiGPIOFactory()
+
+# Initialize servo on GPIO pin 17 using the pigpio pin factory
+servo = Servo(17, pin_factory=factory)
 servo_is_active = False  # Track the servo state
 
 def control_servo(command):
     global servo_is_active  # To modify the servo state variable
 
-    # Move servo to the 'up' position when "አበበ" is spoken
-    if "አበበ" in command:  # Command for standing up
+    # Move servo to the 'up' position when command is spoken
+    if "እቃብ" in command:  # Command for standing up (update with correct command)
         if not servo_is_active:
             servo.max()  # Move servo to maximum (fully up)
             servo_is_active = True
@@ -18,8 +22,8 @@ def control_servo(command):
         else:
             print("Servo is already in 'stand up' position")
 
-    # Move servo to the 'down' position when "ከበደ" is spoken
-    elif "ከበደ" in command:  # Command for laying down
+    # Move servo to the 'down' position when command is spoken
+    elif "ከበደ" in command:  # Command for laying down (update with correct command)
         if servo_is_active:
             servo.min()  # Move servo to minimum (fully down)
             servo_is_active = False
